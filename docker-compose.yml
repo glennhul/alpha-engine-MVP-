@@ -1,0 +1,49 @@
+version: "3.9"
+services:
+db:
+image: postgres:15
+environment:
+POSTGRES_USER: alpha
+POSTGRES_PASSWORD: alpha
+POSTGRES_DB: alpha
+ports:
+- "5432:5432"
+volumes:
+- db_data:/var/lib/postgresql/data
+
+
+api:
+build: .
+command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+environment:
+DATABASE_URL: postgresql+psycopg2://alpha:alpha@db:5432/alpha
+depends_on:
+- db
+ports:
+- "8000:8000"
+
+
+ingestor:
+build: .
+command: python connectors/ingest.py
+environment:
+DATABASE_URL: postgresql+psycopg2://alpha:alpha@db:5432/alpha
+RSS_POLL_SECONDS: 120
+depends_on:
+- db
+
+
+ui:
+build: .
+command: streamlit run ui/app.py --server.port 8501 --server.address 0.0.0.0
+environment:
+DATABASE_URL: postgresql+psycopg2://alpha:alpha@db:5432/alpha
+depends_on:
+- db
+- api
+ports:
+- "8501:8501"
+
+
+volumes:
+db_data:
