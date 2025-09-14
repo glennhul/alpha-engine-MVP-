@@ -1,0 +1,10 @@
+cp .env.example .env
+# tweak envs if needed
+
+
+# Start DB + API + UI + Ingestor
+docker compose up --build
+
+
+# Visit Streamlit: http://localhost:8501
+# API (FastAPI docs): http://localhost:8000/docs
