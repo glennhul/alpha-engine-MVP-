@@ -1,0 +1,6 @@
+# Fetch daily prices (yfinance) for tickers seen in your DB
+python backtest/fetch_prices.py --start 2019-01-01 --end 2025-09-14
+
+
+# Run backtest on generated features/signals
+python backtest/backtest.py --start 2019-01-01 --end 2025-09-14 --long 10 --short 10
